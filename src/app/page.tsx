@@ -9,8 +9,18 @@ import ClickSpark from "@/Animations/ClickSpark/ClickSpark";
 import Link from "next/link";
 import config from "@/config";
 
+type PinnedRepo = {
+  name: string;
+  url: string;
+  description?: string;
+  stargazerCount: number;
+  languages: {
+    nodes: { name: string }[];
+  };
+};
+
 export default function Home() {
-  const [pinned, setPinned] = useState([]);
+  const [pinned, setPinned] = useState<PinnedRepo[]>([]);
 
   useEffect(() => {
     fetch("/api/github/pinned")

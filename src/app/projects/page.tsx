@@ -8,9 +8,19 @@ import Masonry from "@/Components/Masonry/Masonry";
 import config from "@/config";
 import { FaSpinner } from "react-icons/fa6";
 
+type Project = {
+  id: number;
+  name: string;
+  description: string;
+  language: string;
+  img: string;
+  url: string;
+  height: number;
+};
+
 export default function Home() {
-  const [repos, setRepos] = useState([]);
-  const [projects, setProjects] = useState([]);
+  const [, setRepos] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [shouldShowProjects, setShouldShowProjects] = useState(false);
 
   useEffect(() => {
@@ -19,13 +29,13 @@ export default function Home() {
       .then((data) => {
         setRepos(data);
         // map repos to projects
-        const mappedProjects = data.map((repo) => {
+        const mappedProjects = data.map((repo: Project & { stargazers_count?: number; image?: string; svn_url?: string }) => {
           let height = Math.floor(Math.random() * (600 - 350 + 1)) + 350;
-          if (repo.stargazers_count > 0) {
+          if (repo.stargazers_count && repo.stargazers_count > 0) {
             height = 500;
           }
           return {
-            id: repo.id,
+            id: String(repo.id), // Ensure id is a string
             name: repo.name,
             description: repo.description,
             language: repo.language,

@@ -67,7 +67,7 @@ const preloadImages = async (urls: string[]): Promise<void> => {
 };
 
 interface Item {
-  id: string;
+  id: number | string; // Ensure id can be a string for consistency
   name: string;
   description: string;
   language: string;
@@ -113,36 +113,39 @@ const Masonry: React.FC<MasonryProps> = ({
   const [containerRef, { width }] = useMeasure<HTMLDivElement>();
   const [imagesReady, setImagesReady] = useState(false);
 
-  const getInitialPosition = (item: any) => {
-    const containerRect = containerRef.current?.getBoundingClientRect();
-    if (!containerRect) return { x: item.x, y: item.y };
+  const getInitialPosition = React.useCallback(
+    (item: { x: number; y: number; w: number; h: number }) => {
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (!containerRect) return { x: item.x, y: item.y };
 
-    let direction = animateFrom;
-    if (animateFrom === "random") {
-      const dirs = ["top", "bottom", "left", "right"];
-      direction = dirs[
-        Math.floor(Math.random() * dirs.length)
-      ] as typeof animateFrom;
-    }
+      let direction = animateFrom;
+      if (animateFrom === "random") {
+        const dirs = ["top", "bottom", "left", "right"];
+        direction = dirs[
+          Math.floor(Math.random() * dirs.length)
+        ] as typeof animateFrom;
+      }
 
-    switch (direction) {
-      case "top":
-        return { x: item.x, y: -200 };
-      case "bottom":
-        return { x: item.x, y: window.innerHeight + 200 };
-      case "left":
-        return { x: -200, y: item.y };
-      case "right":
-        return { x: window.innerWidth + 200, y: item.y };
-      case "center":
-        return {
-          x: containerRect.width / 2 - item.w / 2,
-          y: containerRect.height / 2 - item.h / 2,
-        };
-      default:
-        return { x: item.x, y: item.y + 100 };
-    }
-  };
+      switch (direction) {
+        case "top":
+          return { x: item.x, y: -200 };
+        case "bottom":
+          return { x: item.x, y: window.innerHeight + 200 };
+        case "left":
+          return { x: -200, y: item.y };
+        case "right":
+          return { x: window.innerWidth + 200, y: item.y };
+        case "center":
+          return {
+            x: containerRect.width / 2 - item.w / 2,
+            y: containerRect.height / 2 - item.h / 2,
+          };
+        default:
+          return { x: item.x, y: item.y + 100 };
+      }
+    },
+    [animateFrom, containerRef]
+  );
 
   useEffect(() => {
     preloadImages(items.map((i) => i.img)).then(() => setImagesReady(true));
@@ -207,9 +210,9 @@ const Masonry: React.FC<MasonryProps> = ({
     });
 
     hasMounted.current = true;
-  }, [grid, imagesReady, stagger, animateFrom, blurToFocus, duration, ease]);
+  }, [grid, imagesReady, stagger, animateFrom, blurToFocus, duration, ease, getInitialPosition]);
 
-  const handleMouseEnter = (id: string, element: HTMLElement) => {
+  const handleMouseEnter = (id: string | number, element: HTMLElement) => {
     if (scaleOnHover) {
       gsap.to(`[data-key="${id}"]`, {
         scale: hoverScale,
@@ -223,7 +226,7 @@ const Masonry: React.FC<MasonryProps> = ({
     }
   };
 
-  const handleMouseLeave = (id: string, element: HTMLElement) => {
+  const handleMouseLeave = (id: string | number, element: HTMLElement) => {
     if (scaleOnHover) {
       gsap.to(`[data-key="${id}"]`, {
         scale: 1,
