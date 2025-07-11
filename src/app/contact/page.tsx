@@ -31,10 +31,10 @@ export default function Home() {
               <a href="/projects" className="hover:underline">
                 Projects
               </a>
-              <a href={config.no_content_message} className="hover:underline">
+              <a href={config.resume} className="hover:underline">
                 Resume
               </a>
-              <a href={config.no_content_message} className="hover:underline">
+              <a href={config.cv} className="hover:underline">
                 CV
               </a>
               <a href="/contact" className="hover:underline">
@@ -66,14 +66,14 @@ export default function Home() {
               >
                 <TfiEmail className="inline-block mr-2" /> Email me
               </a>
-                <a
-                    href="https://wa.me/923218108000"
-                    className="text-black hover:underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <BsWhatsapp className="inline-block mr-2" /> WhatsApp me
-                </a>
+              <a
+                href="https://wa.me/923218108000"
+                className="text-black hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <BsWhatsapp className="inline-block mr-2" /> WhatsApp me
+              </a>
             </div>
           </Card>
 

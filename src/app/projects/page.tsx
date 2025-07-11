@@ -85,10 +85,10 @@ export default function Home() {
               <a href="/projects" className="hover:underline">
                 Projects
               </a>
-              <a href={config.no_content_message} className="hover:underline">
+              <a href={config.resume} className="hover:underline">
                 Resume
               </a>
-              <a href={config.no_content_message} className="hover:underline">
+              <a href={config.cv} className="hover:underline">
                 CV
               </a>
               <a href="/contact" className="hover:underline">

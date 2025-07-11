@@ -68,10 +68,10 @@ export default function Home() {
               <a href="/projects" className="hover:underline">
                 Projects
               </a>
-              <a href={config.no_content_message} className="hover:underline">
+              <a href={config.resume} className="hover:underline">
                 Resume
               </a>
-              <a href={config.no_content_message} className="hover:underline">
+              <a href={config.cv} className="hover:underline">
                 CV
               </a>
               <a href="/contact" className="hover:underline">
@@ -154,7 +154,7 @@ export default function Home() {
                           <h4 className="text-lg font-semibold text-center mb-2">
                             {item.name}
                           </h4>
-                          <p className="text-sm text-center flex gap-4">
+                          <div className="text-sm text-center flex gap-4">
                             <div className="flex items-center">
                               {item.languages.nodes.map((lang, langIdx) => (
                                 <span
@@ -171,7 +171,7 @@ export default function Home() {
                                 {item.stargazerCount}
                               </span>
                             </div>
-                          </p>
+                          </div>
                         </div>
                         <div className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 opacity-0 group-hover:opacity-100">
                           <div className="relative flex flex-row w-full justify-start gap-4 items-center">
