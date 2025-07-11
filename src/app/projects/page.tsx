@@ -118,7 +118,7 @@ export default function Home() {
                 hoverScale={1.1}
                 blurToFocus={false}
                 colorShiftOnHover={false}
-                className={`$shouldShowProjects ? "" : "hidden"}`}
+                className={`${shouldShowProjects ? "" : "hidden"}`}
               />
             )}
           </Card>
