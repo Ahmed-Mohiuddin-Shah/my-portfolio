@@ -101,6 +101,7 @@ export default function Home() {
                 hoverScale={1.1}
                 blurToFocus={false}
                 colorShiftOnHover={false}
+                className={`$shouldShowProjects ? "" : "hidden"}`}
               />
             ) : (
               <div className="flex items-center justify-center h-full">

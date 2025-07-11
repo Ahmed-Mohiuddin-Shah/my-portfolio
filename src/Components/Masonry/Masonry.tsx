@@ -86,6 +86,7 @@ interface MasonryProps {
   hoverScale?: number;
   blurToFocus?: boolean;
   colorShiftOnHover?: boolean;
+  className?: string; // Optional className for additional styling
 }
 
 const Masonry: React.FC<MasonryProps> = ({
@@ -98,6 +99,7 @@ const Masonry: React.FC<MasonryProps> = ({
   hoverScale = 0.95,
   blurToFocus = true,
   colorShiftOnHover = false,
+  className = "",
 }) => {
   const columns = useMedia(
     [
@@ -243,7 +245,7 @@ const Masonry: React.FC<MasonryProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full"
+      className={`relative w-full ${className}`}
       style={{
         height:
           grid.length && columns
@@ -287,11 +289,9 @@ const Masonry: React.FC<MasonryProps> = ({
               <h3 className="text-lg mb-2 text-bold break-all">{item.name}</h3>
               <p className="text-xs mb-2">{item.description}</p>
               <div className="mt-1 flex flex-wrap gap-1">
-                  <span
-                    className="bg-white text-black px-2 py-1 rounded-full text-[10px]"
-                  >
-                    {item.language}
-                  </span>
+                <span className="bg-white text-black px-2 py-1 rounded-full text-[10px]">
+                  {item.language}
+                </span>
               </div>
             </div>
           </div>
