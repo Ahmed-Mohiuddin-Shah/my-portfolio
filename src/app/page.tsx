@@ -10,7 +10,7 @@ import { IoIosFlower } from "react-icons/io";
 import ClickSpark from "@/Animations/ClickSpark/ClickSpark";
 import Link from "next/link";
 import config from "@/config";
-import { FaSpinner, FaStar } from "react-icons/fa6";
+import { FaSpinner, FaSquareArrowUpRight, FaStar } from "react-icons/fa6";
 
 type PinnedRepo = {
   name: string;
@@ -111,10 +111,11 @@ export default function Home() {
               <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-semibold">Featured Projects</h3>
                 <a
+                  title="View all projects"
                   href="/projects"
                   className="text-5xl hover:text-blue-600 transition-colors"
                 >
-                  ↗
+                  <FaSquareArrowUpRight className="text-blue-600" />
                 </a>
               </div>
               <Image
@@ -219,10 +220,11 @@ export default function Home() {
             <div className="flex flex-row justify-between items-start mb-4">
               <p className="text-xl text-gray-700 mb-2">Have some questions?</p>
               <a
+                title="Contact me"
                 href="/contact"
                 className="text-5xl hover:text-blue-600 transition-colors"
               >
-                ↗
+                <FaSquareArrowUpRight className="text-blue-600" />
               </a>
             </div>
             <h3 className="text-5xl font-bold">Contact me</h3>
