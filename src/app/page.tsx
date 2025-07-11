@@ -10,7 +10,7 @@ import { IoIosFlower } from "react-icons/io";
 import ClickSpark from "@/Animations/ClickSpark/ClickSpark";
 import Link from "next/link";
 import config from "@/config";
-import { FaSpinner } from "react-icons/fa6";
+import { FaSpinner, FaStar } from "react-icons/fa6";
 
 type PinnedRepo = {
   name: string;
@@ -55,7 +55,7 @@ export default function Home() {
       duration={400}
     >
       <main className="min-h-screen bg-[#e6f4ff] text-[#1a1a1a] font-sans p-6 ">
-        <div className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl bg-[#e6f4ff]">
+        <div className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 max-w-[100rem] bg-[#e6f4ff]">
           {/* Header */}
           <Card className="bg-[#cce0ff] col-span-1 md:col-span-3 flex justify-between items-center pb-4">
             <Link href="/">
@@ -144,25 +144,48 @@ export default function Home() {
                       initial="hidden"
                       animate="show"
                       exit="hidden"
-                      className="bg-[#99b3ff] rounded-lg shadow p-4 mb-4 h-full w-full group"
+                      className="bg-[#99b3ff] rounded-lg shadow p-4 mb-4 h-full w-full group cursor-pointer"
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <div className="flex flex-col justify-around min-h-full w-full relative">
                         <div className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 opacity-100 group-hover:opacity-0">
-                          <h4 className="text-lg font-semibold text-center">
+                          <h4 className="text-lg font-semibold text-center mb-2">
                             {item.name}
                           </h4>
-                          <p className="text-sm text-center">
-                            {item.languages?.nodes?.[0]?.name} -{" "}
-                            {item.stargazerCount} stars
+                          <p className="text-sm text-center flex gap-4">
+                            <div className="flex items-center">
+                              {item.languages.nodes.map((lang, langIdx) => (
+                                <span
+                                  key={langIdx}
+                                  className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full text-xs mr-1"
+                                >
+                                  {lang.name}
+                                </span>
+                              ))}
+                            </div>
+                            <div>
+                              <span className="text-gray-600 flex items-center gap-1">
+                                <FaStar className="text-yellow-500" />{" "}
+                                {item.stargazerCount}
+                              </span>
+                            </div>
                           </p>
                         </div>
                         <div className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-                          <p className="text-black text-center text-sm break-all truncate max-w-xs">
-                            {item.description || "No description available."}
-                          </p>
+                          <div className="relative flex flex-row w-full justify-start gap-4 items-center">
+                            <Image
+                              src="/projects-image.png"
+                              alt={item.name}
+                              width={100}
+                              height={100}
+                              className="relative left-0 rounded-lg object-cover max-w-40 max-h-40"
+                            />
+                            <p className="relative right-0 text-black text-center text-sm break-all truncate max-w-xs">
+                              {item.description || "No description available."}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </motion.a>
@@ -173,10 +196,10 @@ export default function Home() {
           </Card>
 
           {/* Bio */}
-          <Card className="bg-[#cce0ff] p-4 text-sm leading-relaxed">
-            <FcMindMap className="text-4xl mb-10" />
-            <p className="text-sm leading-relaxed">
-              Hi, I’m <strong>Ahmed Mohiuddin Shah</strong> — a hands-on
+          <Card className="bg-[#cce0ff] p-4 text-sm leading-relaxed row-span-2">
+            <FcMindMap className="text-7xl mb-10" />
+            <p className="text-xl leading-relaxed">
+              Hi, I{"'"}m <strong>Ahmed Mohiuddin Shah</strong> — a hands-on
               Computer Science major who loves building things, whether it’s
               full-stack web apps, IoT systems, or creative hardware projects.
               <br />
@@ -192,7 +215,7 @@ export default function Home() {
           </Card>
 
           {/* Contact Box */}
-          <Card className="bg-[#99b3ff] p-6 flex flex-col justify-between min-h-56 overflow-hidden relative">
+          <Card className="bg-[#99b3ff] p-6 flex flex-col justify-between min-h-56 overflow-hidden relative row-span-2">
             <div className="flex flex-row justify-between items-start mb-4">
               <p className="text-xl text-gray-700 mb-2">Have some questions?</p>
               <a
@@ -206,7 +229,7 @@ export default function Home() {
           </Card>
 
           {/* Footer Socials */}
-          <Card className="bg-[#cce0ff] md:col-span-3 flex justify-end space-x-4 text-sm pt-4 uppercase">
+          <Card className="bg-[#cce0ff] md:col-span-1 flex justify-end space-x-4 text-lg pt-4 uppercase">
             <a
               href="https://github.com/Ahmed-Mohiuddin-Shah"
               className="hover:underline"
