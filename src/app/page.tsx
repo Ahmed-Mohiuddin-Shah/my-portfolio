@@ -2,12 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+
+import { motion, AnimatePresence } from "framer-motion";
 import Card from "./Card";
 import { FcMindMap } from "react-icons/fc";
 import { IoIosFlower } from "react-icons/io";
 import ClickSpark from "@/Animations/ClickSpark/ClickSpark";
 import Link from "next/link";
 import config from "@/config";
+import { FaSpinner } from "react-icons/fa6";
 
 type PinnedRepo = {
   name: string;
@@ -19,13 +22,29 @@ type PinnedRepo = {
   };
 };
 
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.15, // Controls delay between children
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 50 }, // Start from bottom
+  show: { opacity: 1, y: 0 },
+};
+
 export default function Home() {
   const [pinned, setPinned] = useState<PinnedRepo[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/github/pinned")
       .then((res) => res.json())
-      .then((data) => setPinned(data));
+      .then((data) => (setPinned(data), setLoading(false)));
   }, []);
   return (
     <ClickSpark
@@ -55,7 +74,7 @@ export default function Home() {
               <a href={config.no_content_message} className="hover:underline">
                 CV
               </a>
-              <a href={config.no_content_message} className="hover:underline">
+              <a href="/contact" className="hover:underline">
                 Contact
               </a>
             </nav>
@@ -106,35 +125,51 @@ export default function Home() {
                 className="rounded-lg object-cover w-full h-auto max-h-40"
               />
             </div>
-            <div className="flex flex-col justify-center items-center mt-4 h-full max-h-full">
-              {pinned.map((item, idx) => (
-                <a
-                  key={idx}
-                  className="bg-[#99b3ff] rounded-lg shadow p-4 mb-4 h-full w-full group"
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className="flex flex-col justify-around min-h-full w-full relative">
-                    {/* Title & Description (centered, visible when not hovered) */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 opacity-100 group-hover:opacity-0">
-                      <h4 className="text-lg font-semibold text-center">
-                        {item.name}
-                      </h4>
-                      <p className="text-sm text-center">
-                        {item.languages.nodes[0].name} - {item.stargazerCount} stars
-                      </p>
-                    </div>
-                    {/* Content (centered, visible on hover) */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-                      <p className="text-black text-center text-sm break-all truncate max-w-xs">
-                        {item.description || "No description available."}
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
+            <motion.div
+              className="flex flex-col justify-center items-center mt-4 h-full max-h-full"
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+            >
+              {loading ? (
+                <FaSpinner className="text-4xl text-blue-500 animate-spin" />
+              ) : pinned.length === 0 ? (
+                <p className="text-gray-500">No pinned projects found.</p>
+              ) : (
+                <AnimatePresence>
+                  {pinned.map((item, idx) => (
+                    <motion.a
+                      key={idx}
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="show"
+                      exit="hidden"
+                      className="bg-[#99b3ff] rounded-lg shadow p-4 mb-4 h-full w-full group"
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div className="flex flex-col justify-around min-h-full w-full relative">
+                        <div className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 opacity-100 group-hover:opacity-0">
+                          <h4 className="text-lg font-semibold text-center">
+                            {item.name}
+                          </h4>
+                          <p className="text-sm text-center">
+                            {item.languages?.nodes?.[0]?.name} -{" "}
+                            {item.stargazerCount} stars
+                          </p>
+                        </div>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                          <p className="text-black text-center text-sm break-all truncate max-w-xs">
+                            {item.description || "No description available."}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.a>
+                  ))}
+                </AnimatePresence>
+              )}
+            </motion.div>
           </Card>
 
           {/* Bio */}
@@ -161,7 +196,7 @@ export default function Home() {
             <div className="flex flex-row justify-between items-start mb-4">
               <p className="text-xl text-gray-700 mb-2">Have some questions?</p>
               <a
-                href={config.no_content_message}
+                href="/contact"
                 className="text-5xl hover:text-blue-600 transition-colors"
               >
                 ↗

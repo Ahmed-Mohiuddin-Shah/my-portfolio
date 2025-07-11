@@ -29,21 +29,29 @@ export default function Home() {
       .then((data) => {
         setRepos(data);
         // map repos to projects
-        const mappedProjects = data.map((repo: Project & { stargazers_count?: number; image?: string; svn_url?: string }) => {
-          let height = Math.floor(Math.random() * (600 - 350 + 1)) + 350;
-          if (repo.stargazers_count && repo.stargazers_count > 0) {
-            height = 500;
+        const mappedProjects = data.map(
+          (
+            repo: Project & {
+              stargazers_count?: number;
+              image?: string;
+              svn_url?: string;
+            }
+          ) => {
+            let height = Math.floor(Math.random() * (600 - 350 + 1)) + 350;
+            if (repo.stargazers_count && repo.stargazers_count > 0) {
+              height = 500;
+            }
+            return {
+              id: String(repo.id), // Ensure id is a string
+              name: repo.name,
+              description: repo.description,
+              language: repo.language,
+              img: repo.image || "/projects-image.png",
+              url: repo.svn_url,
+              height,
+            };
           }
-          return {
-            id: String(repo.id), // Ensure id is a string
-            name: repo.name,
-            description: repo.description,
-            language: repo.language,
-            img: repo.image || "/projects-image.png",
-            url: repo.svn_url,
-            height,
-          };
-        });
+        );
         setProjects(mappedProjects);
         setShouldShowProjects(true);
       });
@@ -83,14 +91,23 @@ export default function Home() {
               <a href={config.no_content_message} className="hover:underline">
                 CV
               </a>
-              <a href={config.no_content_message} className="hover:underline">
+              <a href="/contact" className="hover:underline">
                 Contact
               </a>
             </nav>
           </Card>
 
           <Card className="bg-[#cce0ff] md:col-span-3 h-fit">
-            {shouldShowProjects ? (
+            {!shouldShowProjects ? (
+              <div className="flex items-center justify-center h-full">
+                <FaSpinner className="animate-spin text-4xl text-blue-500" />
+                <span className="ml-2 text-lg">Loading projects...</span>
+              </div>
+            ) : projects.length === 0 ? (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-gray-500">No projects available.</p>
+              </div>
+            ) : (
               <Masonry
                 items={projects}
                 ease="power3.out"
@@ -103,11 +120,6 @@ export default function Home() {
                 colorShiftOnHover={false}
                 className={`$shouldShowProjects ? "" : "hidden"}`}
               />
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <FaSpinner className="animate-spin text-4xl text-blue-500" />
-                <span className="ml-2 text-lg">Loading projects...</span>
-              </div>
             )}
           </Card>
 
